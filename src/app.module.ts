@@ -8,19 +8,15 @@ import { TemaModule } from './tema/tema.module';
 import { UsuarioModule } from './usuário/usuario.module';
 import { Usuario } from './usuário/entities/usuario.entity';
 import { AppController } from './app.controller';
+import { ConfigModule } from '@nestjs/config';
+import { ProdService } from './data/services/prod.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: '*@5.!6uVbC07ml$',
-      database: 'db_blogpessoal',
-      entities: [Postagem, Tema, Usuario],
-      synchronize: true,
-      logging: true,
+    ConfigModule.forRoot(),
+    TypeOrmModule.forRootAsync({
+      useClass: ProdService,
+      imports: [ConfigModule]
     }),
     PostagemModule,
     TemaModule,
